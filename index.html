@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Samson Recipes Site data dashboard</title>
+  <title>Samson Recipes Dashboard</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,6 +12,13 @@
       justify-content: center;
       padding: 40px;
       gap: 20px;
+    }
+
+    h1 {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0074D9;
     }
 
     .stat-card {
@@ -39,13 +46,6 @@
       font-size: 1.5em;
       font-weight: bold;
       word-wrap: break-word;
-    }
-
-    h1 {
-      width: 100%;
-      text-align: center;
-      margin-bottom: 30px;
-      color: #0074D9;
     }
   </style>
 </head>
@@ -88,7 +88,7 @@
   </div>
 
   <script>
-    const apiUrl = "https://neocities.org/api/info?sitename=samson-recipes";
+    const apiUrl = "https://bold-salad-922c.bvpstudios012.workers.dev/";
 
     async function fetchStats() {
       try {
@@ -105,11 +105,12 @@
         document.getElementById("tags").textContent = info.tags.join(", ");
       } catch (err) {
         console.error("Error fetching stats:", err);
+        document.querySelectorAll(".stat-value").forEach(el => el.textContent = "Error");
       }
     }
 
     fetchStats();
-    setInterval(fetchStats, 3000); // update every 30 seconds
+    setInterval(fetchStats, 30000); // update every 30 seconds
   </script>
 </body>
 </html>
