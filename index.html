@@ -1,116 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Samson Recipes Dashboard</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f4f8;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 40px;
-      gap: 20px;
-    }
-
-    h1 {
-      width: 100%;
-      text-align: center;
-      margin-bottom: 30px;
-      color: #0074D9;
-    }
-
-    .stat-card {
-      background: #0074D9; /* professional blue */
-      color: white;
-      padding: 20px;
-      border-radius: 15px;
-      width: 250px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      text-align: center;
-      transition: transform 0.2s;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .stat-title {
-      font-size: 1em;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-
-    .stat-value {
-      font-size: 1.5em;
-      font-weight: bold;
-      word-wrap: break-word;
-    }
-  </style>
+    <title>Displaying Neocities API JSON</title>
 </head>
 <body>
-  <h1>Samson Recipes Live Dashboard</h1>
+    <h1>Neocities Site Info</h1>
+    <pre id="site-info"></pre>
 
-  <div class="stat-card">
-    <div class="stat-title">Site Name</div>
-    <div class="stat-value" id="sitename">Loading...</div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-title">Views</div>
-    <div class="stat-value" id="views">Loading...</div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-title">Hits</div>
-    <div class="stat-value" id="hits">Loading...</div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-title">Created At</div>
-    <div class="stat-value" id="created_at">Loading...</div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-title">Last Updated</div>
-    <div class="stat-value" id="last_updated">Loading...</div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-title">Domain</div>
-    <div class="stat-value" id="domain">Loading...</div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-title">Tags</div>
-    <div class="stat-value" id="tags">Loading...</div>
-  </div>
-
-  <script>
-    const apiUrl = "https://bold-salad-922c.bvpstudios012.workers.dev/";
-
-    async function fetchStats() {
-      try {
-        const res = await fetch(apiUrl);
-        const data = await res.json();
-        const info = data.info;
-
-        document.getElementById("sitename").textContent = info.sitename;
-        document.getElementById("views").textContent = info.views;
-        document.getElementById("hits").textContent = info.hits;
-        document.getElementById("created_at").textContent = info.created_at;
-        document.getElementById("last_updated").textContent = info.last_updated;
-        document.getElementById("domain").textContent = info.domain || "N/A";
-        document.getElementById("tags").textContent = info.tags.join(", ");
-      } catch (err) {
-        console.error("Error fetching stats:", err);
-        document.querySelectorAll(".stat-value").forEach(el => el.textContent = "Error");
-      }
-    }
-
-    fetchStats();
-    setInterval(fetchStats, 30000); // update every 30 seconds
-  </script>
+    <script>
+        fetch('https://neocities.org/api/info?sitename=samson-recipes')
+            .then(response => {
+                // Ensure the response was successful
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const preElement = document.getElementById('site-info');
+                // Format the JSON data with 2-space indentation for readability
+                preElement.textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error fetching API data:', error);
+                const preElement = document.getElementById('site-info');
+                preElement.textContent = 'Error: Could not load data.';
+            });
+    </script>
 </body>
 </html>
